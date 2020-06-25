@@ -12,7 +12,6 @@ namespace MarketListAPI.Models
         public DateTime Date { get; set; }
         
         public decimal TotalPrice { get; set; }
-        
         public IEnumerable<Item> Itens { get; set; }
     }
 }

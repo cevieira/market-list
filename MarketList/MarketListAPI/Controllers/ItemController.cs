@@ -8,27 +8,26 @@ using Microsoft.EntityFrameworkCore;
 namespace MarketListAPI.Controllers
 {
     [ApiController]
-    [Route("v1/marketlists")]
-    public class MarketListController : ControllerBase
+    [Route("v1/items")]
+    public class ItemController : ControllerBase
     {
         [HttpGet]
         [Route("")]
-        public async Task<ActionResult<List<MarketList>>> Get([FromServices] DataContext context)
+        public async Task<ActionResult<List<Item>>> Get([FromServices] DataContext context)
         {
-            return await context.MarketLists
-                .Include(x => x.Itens)
+            return await context.Items
                 .AsNoTracking()
                 .ToListAsync();
         }
 
         [HttpPost]
         [Route("")]
-        public async Task<ActionResult<MarketList>> Post([FromServices] DataContext context,
-            [FromBody] MarketList model)
+        public async Task<ActionResult<Item>> Post([FromServices] DataContext context,
+            [FromBody] Item model)
         {
             if (ModelState.IsValid)
             {
-                context.MarketLists.Add(model);
+                context.Items.Add(model);
                 await context.SaveChangesAsync();
                 return model;
             }
