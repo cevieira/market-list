@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarketListAPI.Data;
 using MarketListAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace MarketListAPI.Controllers
     {
         [HttpGet]
         [Route("")]
+        [Authorize]
         public async Task<ActionResult<List<Item>>> Get([FromServices] DataContext context)
         {
             return await context.Items
@@ -22,6 +24,7 @@ namespace MarketListAPI.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize]
         public async Task<ActionResult<Item>> Post([FromServices] DataContext context,
             [FromBody] Item model)
         {

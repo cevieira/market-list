@@ -12,5 +12,7 @@ namespace MarketListAPI.Data
 
         public DbSet<MarketList> MarketLists { get; set; }
         public DbSet<Item> Items { get; set; }
+        
+        public DbSet<User> Users { get; set; }
     }
 }

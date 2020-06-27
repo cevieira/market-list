@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace MarketListAPI.Models
 {
@@ -21,5 +22,10 @@ namespace MarketListAPI.Models
         }
 
         public IEnumerable<Item> Itens { get; set; }
+        
+        public int UserId { get; set; }
+        
+        [JsonIgnore]
+        public User User { get; set; }
     }
 }
