@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MarketListAPI.Models
 {
@@ -23,6 +24,8 @@ namespace MarketListAPI.Models
         [Required(ErrorMessage = "Este campo é obrigatório")]
         [Range(1, int.MaxValue, ErrorMessage = "MarketList inválido")]
         public int MarketListId { get; set; }
+        
+        [JsonIgnore]
         public MarketList MarketList { get; set; }
     }
 }
