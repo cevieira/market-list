@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using MarketListAPI.Data;
@@ -16,17 +17,17 @@ namespace MarketListAPI.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody]User model, [FromServices]DataContext context )
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody]AuthenticateModel model, [FromServices]DataContext context,
+            [FromServices] PasswordHasher passwordHasher,
+            [FromServices]UserService userService)
         {
-            var user = await UserRepository.Get(context, model.Username, model.Password);
+            var user = await userService.Authenticate(context, passwordHasher, model.Username, model.Password);
 
             if (user == null)
                 return NotFound();
 
             var token = TokenService.GenerateToken(user);
 
-            user.Password = "";
-    
             return new
             {
                 user = user,
@@ -38,10 +39,19 @@ namespace MarketListAPI.Controllers
         [Route("")]
         [AllowAnonymous]
         public async Task<ActionResult<User>> Post([FromServices] DataContext context,
+            [FromServices] PasswordHasher passwordHasher,
             [FromBody]User model)
         {
             if (ModelState.IsValid)
             {
+                var passwordHashed = passwordHasher.Hash(model.Password);
+                model.Password = passwordHashed;
+                
+                if (string.IsNullOrWhiteSpace(model.Role))
+                {
+                    model.Role = Role.User;
+                }
+                
                 context.Users.Add(model);
                 await context.SaveChangesAsync();
                 return model;

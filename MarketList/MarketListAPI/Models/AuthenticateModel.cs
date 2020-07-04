@@ -2,15 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MarketListAPI.Models
 {
-    public class User : Base
+    public class AuthenticateModel
     {
         [Required]
         public string Username { get; set; }
-        [Required]
-        public string Password { get; set; }
         
         [Required]
-        public string Email { get; set; }
-        public string Role { get; set; }
+        public string Password { get; set; }
     }
 }

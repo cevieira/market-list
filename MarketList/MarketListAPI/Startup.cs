@@ -1,6 +1,7 @@
 using System.Text;
 using MarketListAPI.Data;
 using MarketListAPI.Models;
+using MarketListAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +27,8 @@ namespace MarketListAPI
         {
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
             services.AddScoped<DataContext, DataContext>();
+            services.AddScoped<PasswordHasher, PasswordHasher>();
+            services.AddScoped<UserService, UserService>();
             services.AddControllers();
             
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
