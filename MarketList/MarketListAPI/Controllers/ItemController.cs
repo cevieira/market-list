@@ -14,7 +14,7 @@ namespace MarketListAPI.Controllers
     {
         [HttpGet]
         [Route("")]
-        [Authorize]
+        [AllowAnonymous] //TODO: Verificar autorizacao
         public async Task<ActionResult<List<Item>>> Get([FromServices] DataContext context)
         {
             return await context.Items
@@ -24,18 +24,15 @@ namespace MarketListAPI.Controllers
 
         [HttpPost]
         [Route("")]
-        [Authorize]
+        [AllowAnonymous] //TODO: Verificar autorizacao
         public async Task<ActionResult<Item>> Post([FromServices] DataContext context,
             [FromBody] Item model)
         {
-            if (ModelState.IsValid)
-            {
-                context.Items.Add(model);
-                await context.SaveChangesAsync();
-                return model;
-            }
+            if (!ModelState.IsValid) return BadRequest();
+            context.Items.Add(model);
+            await context.SaveChangesAsync();
+            return model;
 
-            return BadRequest();
         }
     }
 }

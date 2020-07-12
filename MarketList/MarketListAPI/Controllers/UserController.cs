@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using MarketListAPI.Data;
+using MarketListAPI.Helpers;
 using MarketListAPI.Models;
 using MarketListAPI.Repositories;
 using MarketListAPI.Services;
@@ -30,7 +31,7 @@ namespace MarketListAPI.Controllers
 
             return new
             {
-                user = user,
+                user = user.WithoutPassword(),
                 token = token
             };
         }

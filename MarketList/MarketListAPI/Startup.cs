@@ -3,8 +3,11 @@ using MarketListAPI.Data;
 using MarketListAPI.Models;
 using MarketListAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +28,9 @@ namespace MarketListAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
+            services.AddCors();
+            services.AddDbContext<DataContext>(
+                opt => opt.UseNpgsql(Configuration.GetConnectionString("DataContext")));
             services.AddScoped<DataContext, DataContext>();
             services.AddScoped<PasswordHasher, PasswordHasher>();
             services.AddScoped<UserService, UserService>();
@@ -49,7 +54,6 @@ namespace MarketListAPI
                         ValidateAudience = false
                     };
                 });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +64,10 @@ namespace MarketListAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(x => x.AllowAnyOrigin());
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
             
             app.UseHttpsRedirection();
 
